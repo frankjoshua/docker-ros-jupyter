@@ -135,3 +135,4 @@ RUN conda install -c conda-forge ipywidgets
 
 RUN pip install jupyros
 RUN jupyter nbextension enable --py --sys-prefix jupyros
+RUN jupyter labextension install jupyter-ros
