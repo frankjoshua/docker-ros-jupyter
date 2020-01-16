@@ -133,6 +133,13 @@ USER $NB_UID
 # RUN jupyter nbextension enable --py --sys-prefix ipywidgets
 RUN conda install -c conda-forge ipywidgets
 
-RUN pip install jupyros
+RUN pip install git+https://github.com/RoboStack/jupyter-ros.git
 RUN jupyter nbextension enable --py --sys-prefix jupyros
 RUN jupyter labextension install jupyter-ros
+RUN jupyter nbextension enable --py --sys-prefix widgetsnbextension
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
+
+# Install Sidecar
+RUN pip install sidecar
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-sidecar
