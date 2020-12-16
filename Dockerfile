@@ -10,7 +10,7 @@ USER root
 # features (e.g., download as all possible file formats)
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update \
- && apt-get install -yq --no-install-recommends \
+    && apt-get install -yq --no-install-recommends \
     wget \
     bzip2 \
     ca-certificates \
@@ -18,7 +18,7 @@ RUN apt-get update \
     locales \
     fonts-liberation \
     run-one \
- && apt-get clean && rm -rf /var/lib/apt/lists/*
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
@@ -137,9 +137,9 @@ RUN pip install git+https://github.com/RoboStack/jupyter-ros.git
 RUN jupyter nbextension enable --py --sys-prefix jupyros
 RUN jupyter labextension install jupyter-ros
 RUN jupyter nbextension enable --py --sys-prefix widgetsnbextension
-RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
+#RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
 
 # Install Sidecar
-RUN pip install sidecar
-RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
-RUN jupyter labextension install @jupyter-widgets/jupyterlab-sidecar
+#RUN pip install sidecar
+#RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
+#RUN jupyter labextension install @jupyter-widgets/jupyterlab-sidecar
