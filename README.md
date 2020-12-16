@@ -1,4 +1,4 @@
-# ROS master in Docker [![](https://img.shields.io/docker/pulls/frankjoshua/ros-jupyter)](https://hub.docker.com/r/frankjoshua/ros-jupyter) [![CI](https://github.com/frankjoshua/docker-ros-jupyter/workflows/CI/badge.svg)](https://github.com/frankjoshua/docker-ros-jupyter/actions)
+# ROS Jupyter Notebook with ROS in Docker [![](https://img.shields.io/docker/pulls/frankjoshua/ros-jupyter)](https://hub.docker.com/r/frankjoshua/ros-jupyter) [![CI](https://github.com/frankjoshua/docker-ros-jupyter/workflows/CI/badge.svg)](https://github.com/frankjoshua/docker-ros-jupyter/actions)
 
 ## Description
 
