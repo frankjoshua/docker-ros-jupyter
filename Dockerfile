@@ -19,7 +19,7 @@ ARG conda_version="4.9.2"
 # Miniforge installer patch version
 ARG miniforge_patch_number="0"
 # Miniforge installer architecture
-ARG miniforge_arch="x86_64"
+ARG miniforge_arch="aarch64"
 # Python implementation to use 
 # can be either Miniforge3 to use Python or Miniforge-pypy3 to use PyPy
 ARG miniforge_python="Miniforge3"
@@ -35,7 +35,11 @@ ARG miniforge_checksum="6321775eb2c02d7f51d3a9004ce0be839099f126f4099c7815314285
 ENV DEBIAN_FRONTEND noninteractive
 # Install apt-utils from arm64 systems
 RUN apt update \
-    && apt install -yq --no-install-recommends \
+    && apt install -y \
+    apt \
+    && apt clean && rm -rf /var/lib/apt/lists/*
+RUN apt update \
+    && apt install -y --no-install-recommends \
     apt-utils \
     && apt clean && rm -rf /var/lib/apt/lists/*
 
@@ -103,7 +107,6 @@ WORKDIR /tmp
 
 # Prerequisites installation: conda, pip, tini
 RUN wget --quiet "https://github.com/conda-forge/miniforge/releases/download/${miniforge_version}/${miniforge_installer}" && \
-    echo "${miniforge_checksum} *${miniforge_installer}" | sha256sum --check && \
     /bin/bash "${miniforge_installer}" -f -b -p $CONDA_DIR && \
     rm "${miniforge_installer}" && \
     # Conda configuration see https://conda.io/projects/conda/en/latest/configuration.html
