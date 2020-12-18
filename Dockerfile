@@ -33,20 +33,16 @@ ARG miniforge_checksum="6321775eb2c02d7f51d3a9004ce0be839099f126f4099c7815314285
 
 
 ENV DEBIAN_FRONTEND noninteractive
-# Install apt-utils from arm64 systems
-RUN apt update \
-    && apt install -y \
-    apt \
-    && apt clean && rm -rf /var/lib/apt/lists/*
-RUN apt update \
-    && apt install -y --no-install-recommends \
-    apt-utils \
-    && apt clean && rm -rf /var/lib/apt/lists/*
+RUN apt update && \
+    apt install -yq \
+    apt-utils && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install all OS dependencies for notebook server that starts but lacks all
 # features (e.g., download as all possible file formats)
 RUN apt update \
-    && apt install -yq --no-install-recommends \
+    && apt install -yq \
     wget \
     ca-certificates \
     sudo \
@@ -106,7 +102,10 @@ RUN mkdir "/home/$NB_USER/work" && \
 WORKDIR /tmp
 
 # Prerequisites installation: conda, pip, tini
-RUN wget --quiet "https://github.com/conda-forge/miniforge/releases/download/${miniforge_version}/${miniforge_installer}" && \
+COPY get_arch.sh /
+RUN export miniforge_arch=$(/get_arch.sh) && \
+    export miniforge_installer="${miniforge_python}-${miniforge_version}-Linux-${miniforge_arch}.sh" && \
+    wget -nv "https://github.com/conda-forge/miniforge/releases/download/${miniforge_version}/${miniforge_installer}" && \
     /bin/bash "${miniforge_installer}" -f -b -p $CONDA_DIR && \
     rm "${miniforge_installer}" && \
     # Conda configuration see https://conda.io/projects/conda/en/latest/configuration.html

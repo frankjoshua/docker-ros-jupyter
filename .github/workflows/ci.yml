@@ -30,4 +30,4 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build and push image to DockerHub
-        run: ./build.sh -t $DOCKER_CONTAINER -p -a linux/arm/v7,linux/arm64,linux/amd64
+        run: ./build.sh -t $DOCKER_CONTAINER -p -a linux/arm64,linux/amd64
