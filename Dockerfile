@@ -33,12 +33,6 @@ ARG miniforge_checksum="6321775eb2c02d7f51d3a9004ce0be839099f126f4099c7815314285
 
 
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt update && \
-    apt install -yq \
-    apt-utils && \
-    apt clean && \
-    rm -rf /var/lib/apt/lists/*
-
 # Install all OS dependencies for notebook server that starts but lacks all
 # features (e.g., download as all possible file formats)
 RUN apt update \
@@ -170,9 +164,8 @@ RUN pip install git+https://github.com/RoboStack/jupyter-ros.git
 RUN jupyter nbextension enable --py --sys-prefix jupyros
 RUN jupyter labextension install jupyter-ros
 RUN jupyter nbextension enable --py --sys-prefix widgetsnbextension
-#RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
 
 # Install Sidecar
-#RUN pip install sidecar
-#RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
-#RUN jupyter labextension install @jupyter-widgets/jupyterlab-sidecar
+RUN pip install sidecar
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-sidecar
