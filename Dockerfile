@@ -169,3 +169,13 @@ RUN jupyter nbextension enable --py --sys-prefix widgetsnbextension
 RUN pip install sidecar
 RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
 RUN jupyter labextension install @jupyter-widgets/jupyterlab-sidecar
+
+USER root
+# Install ROS Move base
+RUN apt update \
+    && apt install -yq \
+    ros-$ROS_DISTRO-move-base \
+    && apt clean && rm -rf /var/lib/apt/lists/*
+
+# Switch back to jovyan to avoid accidental container runs as root
+USER $NB_UID
