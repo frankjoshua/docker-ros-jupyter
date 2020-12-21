@@ -179,3 +179,5 @@ RUN apt update \
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
+RUN mkdir /home/jovyan/jupyter
+WORKDIR /home/jovyan/jupyter
