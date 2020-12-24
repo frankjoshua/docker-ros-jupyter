@@ -177,6 +177,8 @@ RUN apt update \
     ros-$ROS_DISTRO-move-base \
     && apt clean && rm -rf /var/lib/apt/lists/*
 
+RUN pip install docker
+
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
 RUN mkdir /home/jovyan/jupyter
