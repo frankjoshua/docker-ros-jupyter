@@ -11,9 +11,10 @@ docker run -it \
     --network="host" \
     --env="ROS_IP=$ROS_IP" \
     --env="ROS_MASTER_URI=$ROS_MASTER_URI" \
-    -v "/tmp:/home/jovyan" \
+    --env="JUPYTER_ENABLE_LAB=true" \
+    -v "$PWD:/home/jovyan/jupyter" \
     -p "8888:8888" \
-    frankjoshua/ros-jupyter
+    frankjoshua/ros-jupyter start-notebook.sh --ip='*' --NotebookApp.token='' --NotebookApp.password=''
 ```
 
 ## Building

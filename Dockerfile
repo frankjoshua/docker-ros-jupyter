@@ -156,16 +156,17 @@ RUN fix-permissions /etc/jupyter/
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
 
-RUN pip install --upgrade pip
-RUN pip install bqplot pyyaml ipywidgets
-#RUN jupyter nbextension enable --py --sys-prefix ipywidgets
-RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
-#RUN conda install -c conda-forge ipywidgets
+# RUN pip install bqplot pyyaml ipywidgets
+RUN conda install -c conda-forge ipywidgets
+RUN conda install -c conda-forge bqplot
+RUN conda install -c conda-forge pyyaml
+RUN jupyter nbextension enable --py --sys-prefix widgetsnbextension
+# RUN jupyter nbextension enable --py --sys-prefix ipywidgets
 
-RUN pip install git+https://github.com/RoboStack/jupyter-ros.git
+RUN pip install jupyros
 RUN jupyter nbextension enable --py --sys-prefix jupyros
 RUN jupyter labextension install jupyter-ros
-RUN jupyter nbextension enable --py --sys-prefix widgetsnbextension
+
 
 # Install Sidecar
 RUN pip install sidecar
@@ -173,13 +174,11 @@ RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
 RUN jupyter labextension install @jupyter-widgets/jupyterlab-sidecar
 
 USER root
-# Install ROS Move base
+# Install ROS Move base messages
 RUN apt update \
     && apt install -yq \
-    ros-$ROS_DISTRO-move-base \
+    ros-$ROS_DISTRO-move-base-msgs \
     && apt clean && rm -rf /var/lib/apt/lists/*
-
-RUN pip install docker
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
