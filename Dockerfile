@@ -156,9 +156,11 @@ RUN fix-permissions /etc/jupyter/
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
 
-# RUN pip install bqplot pyyaml ipywidgets
-# RUN jupyter nbextension enable --py --sys-prefix ipywidgets
-RUN conda install -c conda-forge ipywidgets
+RUN pip install --upgrade pip
+RUN pip install bqplot pyyaml ipywidgets
+#RUN jupyter nbextension enable --py --sys-prefix ipywidgets
+RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
+#RUN conda install -c conda-forge ipywidgets
 
 RUN pip install git+https://github.com/RoboStack/jupyter-ros.git
 RUN jupyter nbextension enable --py --sys-prefix jupyros
