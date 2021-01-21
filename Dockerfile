@@ -11,11 +11,15 @@ RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -yq dist-upgrade \
     locales cmake git build-essential \
     # python-pip \
     python3-pip python3-setuptools \
+    python3-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install --upgrade pip setuptools 
-RUN python3 -m pip install jupyterlab==0.35.4 bash_kernel==0.7.1 tornado 
+RUN pip3 install --upgrade pip setuptools wheel
+RUN python3 -m pip install argon2-cffi
+RUN python3 -m pip install jupyterlab 
+RUN python3 -m pip install tornado
+RUN python3 -m pip install bash_kernel
 RUN python3 -m bash_kernel.install
 
 ENV SHELL=/bin/bash \
