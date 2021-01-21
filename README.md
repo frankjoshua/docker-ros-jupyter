@@ -10,10 +10,9 @@ Runs a Jupyter Notebook with ROS in a Docker container. Probably need --network=
 docker run -it \
     --env="ROS_IP=$ROS_IP" \
     --env="ROS_MASTER_URI=$ROS_MASTER_URI" \
-    --env="JUPYTER_ENABLE_LAB=true" \
-    -v "$PWD:/home/jovyan/jupyter" \
+    -v "$PWD:/home/jovyan/ros-jupyter" \
     -p "8888:8888" \
-    frankjoshua/ros-jupyter start-notebook.sh --ip='*' --NotebookApp.token='' --NotebookApp.password=''
+    frankjoshua/ros-jupyter
 ```
 
 ## Building
