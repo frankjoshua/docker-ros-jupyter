@@ -9,7 +9,7 @@ ENV LC_ALL C.UTF-8
 RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -yq dist-upgrade \
     && apt-get -o Acquire::ForceIPv4=true install -yq --no-install-recommends \
     locales cmake git build-essential \
-    python3-pip python3-setuptools \
+    python3-pip python3-setuptools python3-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -85,4 +85,11 @@ USER ${NB_USER}
 
 WORKDIR ${HOME}/ros-jupyter
 
-CMD ["jupyter", "notebook", "--no-browser", "--ip=0.0.0.0", "--NotebookApp.token=''"]
+CMD ["jupyter", "notebook", "--no-browser", "--ip=0.0.0.0", "--NotebookApp.token=''", "--allow-root"]
+
+#Install extra ROS messages
+RUN apt-get update -y && \
+    apt-get install -y \
+    ros-$ROS_DISTRO-*-msgs \
+    && \
+    rm -rf /var/lib/apt/lists/*
