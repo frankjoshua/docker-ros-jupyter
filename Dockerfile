@@ -9,7 +9,6 @@ ENV LC_ALL C.UTF-8
 RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -yq dist-upgrade \
     && apt-get -o Acquire::ForceIPv4=true install -yq --no-install-recommends \
     locales cmake git build-essential \
-    # python-pip \
     python3-pip python3-setuptools \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -32,8 +31,6 @@ RUN adduser --disabled-password \
     ${NB_USER}
 
 EXPOSE 8888
-
-CMD ["jupyter", "lab", "--no-browser", "--ip=0.0.0.0", "--NotebookApp.token=''"]
 
 ###################################### ROS #####################################
 
@@ -80,16 +77,12 @@ ENTRYPOINT ["/ros_entrypoint.sh"]
 RUN mkdir -p /home/jovyan/.ros
 RUN chown jovyan.jovyan /home/jovyan/.ros
 
-##################################### COPY #####################################
-
 RUN mkdir ${HOME}/ros-jupyter
-
-# COPY --chown=1000:1000 . ${HOME}/ros-jupyter
-
-##################################### TAIL #####################################
 
 RUN chown ${NB_UID} ${HOME}/ros-jupyter
 
 USER ${NB_USER}
 
 WORKDIR ${HOME}/ros-jupyter
+
+CMD ["jupyter", "notebook", "--no-browser", "--ip=0.0.0.0", "--NotebookApp.token=''"]

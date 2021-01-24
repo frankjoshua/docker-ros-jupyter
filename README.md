@@ -11,7 +11,7 @@ docker run -it \
     --env="ROS_IP=$ROS_IP" \
     --env="ROS_MASTER_URI=$ROS_MASTER_URI" \
     -v "$PWD:/home/jovyan/ros-jupyter" \
-    -p "8888:8888" \
+    --network="host" \
     frankjoshua/ros-jupyter
 ```
 
