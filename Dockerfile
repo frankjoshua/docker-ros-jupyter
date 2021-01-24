@@ -68,6 +68,13 @@ RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -o Acquire::ForceIPv4=t
 
 RUN pip3 install pyyaml rospkg jupyros
 
+# Install extra ROS messages
+RUN apt-get update -y && \
+    apt-get install -y \
+    ros-$ROS_DISTRO-*-msgs \
+    && \
+    rm -rf /var/lib/apt/lists/*
+
 # setup entrypoint
 COPY ./ros_entrypoint.sh /
 RUN chmod a+x /ros_entrypoint.sh
@@ -86,10 +93,3 @@ USER ${NB_USER}
 WORKDIR ${HOME}/ros-jupyter
 
 CMD ["jupyter", "notebook", "--no-browser", "--ip=0.0.0.0", "--NotebookApp.token=''", "--allow-root"]
-
-#Install extra ROS messages
-RUN apt-get update -y && \
-    apt-get install -y \
-    ros-$ROS_DISTRO-*-msgs \
-    && \
-    rm -rf /var/lib/apt/lists/*
