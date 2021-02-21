@@ -4,6 +4,8 @@
 
 Runs a Jupyter Notebook with ROS in a Docker container. Probably need --network="host" because ROS uses ephemeral ports.
 
+This container will also start a ROS master and TFT Web Republisher. I'm currently looking for a way to make that optional.
+
 ## Example
 
 ```

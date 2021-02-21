@@ -1,95 +1,27 @@
-FROM ubuntu:20.04
-
+FROM continuumio/miniconda3
 ################################## JUPYTERLAB ##################################
+SHELL ["/bin/bash", "-c"]
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV LANG C.UTF-8
-ENV LC_ALL C.UTF-8
+RUN conda create -n robostackenv python=3.8
 
-RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -yq dist-upgrade \
-    && apt-get -o Acquire::ForceIPv4=true install -yq --no-install-recommends \
-    locales cmake git build-essential \
-    python3-pip python3-setuptools python3-dev \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Make RUN commands use the new environment:
+SHELL ["conda", "run", "-n", "robostackenv", "/bin/bash", "-c"]
 
-RUN pip3 install --upgrade pip setuptools \
-    && python3 -m pip install jupyterlab==0.35.4 bash_kernel==0.7.1 tornado \
-    && python3 -m bash_kernel.install
+# RUN conda activate robostackenv
+# this adds the conda-forge channel to your persistent configuration in ~/.condarc
+RUN conda config --add channels conda-forge
+# and the robostack channel
+RUN conda config --add channels robostack
+# it's very much advised to use strict channel priority
+RUN conda config --set channel_priority strict
+# either
+RUN conda install -y jupyterlab-ros
 
-ENV SHELL=/bin/bash \
-    NB_USER=jovyan \
-    NB_UID=1000 \
-    LANG=en_US.UTF-8 \
-    LANGUAGE=en_US.UTF-8
-
-ENV HOME=/home/${NB_USER}
-
-RUN adduser --disabled-password \
-    --gecos "Default user" \
-    --uid ${NB_UID} \
-    ${NB_USER}
-
-EXPOSE 8888
+EXPOSE 8890
 
 ###################################### ROS #####################################
+ENV ROS_DISTRO=noetic
+RUN conda install -y nodejs=12 jupyterlab ros-$ROS_DISTRO-ros-core ros-$ROS_DISTRO-rosauth ros-$ROS_DISTRO-rospy ros-$ROS_DISTRO-rosbridge-suite ros-$ROS_DISTRO-rosbag ros-$ROS_DISTRO-tf2-web-republisher
+RUN conda install -y jupyter-ros
 
-# install packages
-RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -o Acquire::ForceIPv4=true install -q -y \
-    dirmngr \
-    gnupg2 \
-    lsb-release \
-    && rm -rf /var/lib/apt/lists/*
-
-# setup keys
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
-
-# setup sources.list
-RUN echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -sc` main" > /etc/apt/sources.list.d/ros-latest.list
-
-# install bootstrap tools
-RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -o Acquire::ForceIPv4=true install --no-install-recommends -y \
-    python3-rosdep \
-    python3-rosinstall \
-    python3-vcstools \
-    python3-catkin-tools \
-    && rm -rf /var/lib/apt/lists/*
-
-# bootstrap rosdep
-RUN rosdep init \
-    && rosdep update
-
-# install ros packages
-ENV ROS_DISTRO noetic
-RUN apt-get -o Acquire::ForceIPv4=true update && apt-get -o Acquire::ForceIPv4=true install -y \
-    ros-${ROS_DISTRO}-ros-base \
-    ros-${ROS_DISTRO}-tf \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN pip3 install pyyaml rospkg jupyros
-
-# Install extra ROS messages
-RUN apt-get update -y && \
-    apt-get install -y \
-    ros-$ROS_DISTRO-*-msgs \
-    && \
-    rm -rf /var/lib/apt/lists/*
-
-# setup entrypoint
-COPY ./ros_entrypoint.sh /
-RUN chmod a+x /ros_entrypoint.sh
-
-ENTRYPOINT ["/ros_entrypoint.sh"]
-
-RUN mkdir -p /home/jovyan/.ros
-RUN chown jovyan.jovyan /home/jovyan/.ros
-
-RUN mkdir ${HOME}/ros-jupyter
-
-RUN chown ${NB_UID} ${HOME}/ros-jupyter
-
-USER ${NB_USER}
-
-WORKDIR ${HOME}/ros-jupyter
-
-CMD ["jupyter", "notebook", "--no-browser", "--ip=0.0.0.0", "--NotebookApp.token=''", "--allow-root"]
+CMD ["conda", "run", "--no-capture-output", "-n", "robostackenv", "jupyter", "lab", "--allow-root", "--no-browser", "--ip=0.0.0.0", "--NotebookApp.token=''"]
