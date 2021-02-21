@@ -14,10 +14,11 @@ RUN conda config --add channels conda-forge
 RUN conda config --add channels robostack
 # it's very much advised to use strict channel priority
 RUN conda config --set channel_priority strict
-# either
-RUN conda install -y jupyterlab-ros
 
-EXPOSE 8890
+RUN conda install -y jupyterlab-ros 
+RUN conda install -y sidecar
+
+EXPOSE 8888
 
 ###################################### ROS #####################################
 ENV ROS_DISTRO=noetic
