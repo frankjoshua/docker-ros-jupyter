@@ -24,5 +24,6 @@ EXPOSE 8888
 ENV ROS_DISTRO=noetic
 RUN conda install -y nodejs=12 jupyterlab ros-$ROS_DISTRO-ros-core ros-$ROS_DISTRO-rosauth ros-$ROS_DISTRO-rospy ros-$ROS_DISTRO-rosbridge-suite ros-$ROS_DISTRO-rosbag ros-$ROS_DISTRO-tf2-web-republisher
 RUN conda install -y jupyter-ros
+RUN conda install -y ros-$ROS_DISTRO-*-msgs
 
 CMD ["conda", "run", "--no-capture-output", "-n", "robostackenv", "jupyter", "lab", "--allow-root", "--no-browser", "--ip=0.0.0.0", "--NotebookApp.token=''"]
