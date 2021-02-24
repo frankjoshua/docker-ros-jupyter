@@ -17,7 +17,7 @@ RUN conda config --add channels robostack
 RUN conda config --set channel_priority strict
 
 ENV ROS_DISTRO=noetic
-RUN conda install -y nodejs=12 jupyterlab jupyterlab-ros sidecar \
+RUN conda install -y nodejs=12 jupyterlab jupyterlab-ros jupyter-ros sidecar \
     ros-$ROS_DISTRO-ros-core ros-$ROS_DISTRO-rosauth \
     ros-$ROS_DISTRO-rospy ros-$ROS_DISTRO-rosbridge-suite \
     ros-$ROS_DISTRO-rosbag ros-$ROS_DISTRO-tf2-web-republisher \
